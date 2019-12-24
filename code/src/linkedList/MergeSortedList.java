@@ -2,29 +2,19 @@ package linkedList;
 
 public class MergeSortedList {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        ListNode list = new ListNode(0);
-        ListNode head = list;
-        while (l1 != null && l2 != null) {
-            list = list.next;
-            if (l1.val <= l2.val) {
-                list.val = l1.val;
-                l1 = l1.next;
-            } else if (l1.val > l2.val) {
-                list.val = l2.val;
-                l2 = l2.next;
-            }
+        if (l1 == null) {
+            return l2;
         }
-        while (l1 != null) {
-            list = l1;
-            list = list.next;
-            l1 = l1.next;
+        if (l2 == null) {
+            return l1;
         }
-        while (l2 != null) {
-            list = l2;
-            list = list.next;
-            l2 = l2.next;
+        if (l1.val < l2.val) {
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
         }
-        return head.next;
     }
 
     public static void main(String[] args) {
@@ -35,8 +25,10 @@ public class MergeSortedList {
         list.next.next.next.next = new ListNode(5);
         ListNode head = new ListNode(1);
         head.next = new ListNode(6);
+        ListNode listA = new ListNode(0);
+        ListNode listB = new ListNode(0);
         MergeSortedList obj = new MergeSortedList();
-        ListNode l = obj.mergeTwoLists(list, head);
+        ListNode l = obj.mergeTwoLists(listA, listB);
         while (l != null) {
             System.out.print(l.val + "->");
             l = l.next;
