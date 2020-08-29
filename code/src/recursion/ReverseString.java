@@ -12,6 +12,7 @@ public class ReverseString {
         System.out.println("Char=" + s[n]);
     }
 
+
     public static void main(String[] args) {
         ReverseString obj = new ReverseString();
         char[] s = {'a', 'b', 'c', 'D'};
