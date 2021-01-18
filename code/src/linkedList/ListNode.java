@@ -7,4 +7,9 @@ class ListNode {
     ListNode(int x) {
         val = x;
     }
+
+    ListNode(int x, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
 }
