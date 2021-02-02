@@ -7,9 +7,9 @@ public class MissingNumber {
         }
         int i = 0;
         while (i < nums.length) {
-            if (nums[i] == i) {
+            if (nums[i] == i || nums[i] >= nums.length) {
                 i++;
-            } else if (nums[i] < nums.length) {
+            } else {
                 int temp = nums[nums[i]];
                 nums[nums[i]] = nums[i];
                 nums[i] = temp;
@@ -24,7 +24,7 @@ public class MissingNumber {
     }
 
     public static void main(String[] args) {
-        int arr[] = {3, 2, 0};
+        int arr[] = {1};
         System.out.println(missingNumber(arr));
     }
 }
