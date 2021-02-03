@@ -10,12 +10,29 @@ public class SpiralMatrix {
         int column = matrix[0].length;
         int r = 0;
         int c = 0;
+        int iniC = 0;
+        int iniR = 0;
         while (r < row && c < column) {
+            iniC = c;
+            iniR = r;
             while (c < column) {
                 System.out.print(matrix[r][c] + " ");
                 c++;
             }
-
+            c--;
+            r++;
+            while (r < row) {
+                System.out.print(matrix[r][c] + " ");
+                r++;
+            }
+            r--;
+            c--;
+            while (c > -1) {
+                System.out.print(matrix[r][c] + " ");
+                c--;
+            }
+            r = iniR + 1;
+            c = iniC + 1;
         }
         return result;
     }
