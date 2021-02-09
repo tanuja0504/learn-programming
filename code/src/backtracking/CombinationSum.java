@@ -3,7 +3,7 @@ package backtracking;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Combination {
+public class CombinationSum {
     public static List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();
         List<Integer> temp = new ArrayList<>();
