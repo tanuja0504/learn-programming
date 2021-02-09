@@ -3,37 +3,42 @@ package backtracking;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Permutation {
-    public static List<List<Integer>> permute(int[] nums) {
+public class Permutation2 {
+    public static List<List<Integer>> permuteUnique(int[] nums) {
+        //Initialize List for output
         List<List<Integer>> list = new ArrayList<>();
+        //Take a temp list
         List<Integer> temp = new ArrayList<>();
+        //Initialize visited array
         boolean visited[] = new boolean[nums.length];
         helper(nums, visited, list, temp);
         return list;
     }
 
+    //Helper Function for DFS approach
     public static void helper(int[] nums, boolean[] visited, List<List<Integer>> list, List<Integer> temp) {
         if (temp.size() == nums.length) {
-            list.add(new ArrayList<>(temp));
+            if (!list.contains(temp)) {
+                list.add(new ArrayList<>(temp));
+            }
             return;
         } else {
-            for (int j = 0; j < nums.length; j++) {
-                if (visited[j]) {
+            for (int i = 0; i < nums.length; i++) {
+                if (visited[i]) {
                     continue;
                 }
-                visited[j] = true;
-                temp.add(nums[j]);
+                visited[i] = true;
+                temp.add(nums[i]);
                 helper(nums, visited, list, temp);
+                //This is to continue on the loop from 0 to n
                 temp.remove(temp.size() - 1);
-                visited[j] = false;
+                visited[i] = false;
             }
         }
-
-
     }
 
     public static void main(String[] args) {
-        int arr[] = {1, 2, 3, 4};
-        System.out.println(permute(arr));
+        int arr[] = {1, 2, 1};
+        System.out.println(permuteUnique(arr));
     }
 }

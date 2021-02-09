@@ -33,8 +33,27 @@ public class Subsets {
         }
     }
 
+    public static List<List<Integer>> subsets1(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        int j = 0;
+        list.add(temp);
+
+        for (int i = 0; i < nums.length; i++) {
+            temp.add(nums[i]);
+            while (j < nums.length) {
+                if (j != i) {
+                    temp.add(nums[j]);
+                    list.add(temp);
+                }
+                j++;
+            }
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         int arr[] = {1, 2, 3, 4};
-        System.out.println(subsets(arr));
+        System.out.println(subsets1(arr));
     }
 }
