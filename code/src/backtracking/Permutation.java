@@ -14,6 +14,7 @@ public class Permutation {
 
     public static void helper(int[] nums, boolean[] visited, List<List<Integer>> list, List<Integer> temp) {
         if (temp.size() == nums.length) {
+            System.out.println("Adding " + temp);
             list.add(new ArrayList<>(temp));
             return;
         } else {
@@ -24,6 +25,7 @@ public class Permutation {
                 visited[j] = true;
                 temp.add(nums[j]);
                 helper(nums, visited, list, temp);
+                System.out.println("Primary Loop Value" + j);
                 temp.remove(temp.size() - 1);
                 visited[j] = false;
             }
@@ -33,7 +35,7 @@ public class Permutation {
     }
 
     public static void main(String[] args) {
-        int arr[] = {1, 2, 3, 4};
+        int arr[] = {1, 2, 3};
         System.out.println(permute(arr));
     }
 }

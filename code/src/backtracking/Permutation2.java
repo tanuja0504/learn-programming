@@ -27,16 +27,25 @@ public class Permutation2 {
                 if (visited[i]) {
                     continue;
                 }
+                System.out.println("For " + i);
+                printA(visited);
                 visited[i] = true;
                 temp.add(nums[i]);
                 helper(nums, visited, list, temp);
                 //This is to continue on the loop from 0 to n
+                //One n times recursion is running and another this loop
                 temp.remove(temp.size() - 1);
                 visited[i] = false;
             }
         }
     }
 
+    public static void printA(boolean[] nums) {
+        for (boolean i : nums) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+    }
     public static void main(String[] args) {
         int arr[] = {1, 2, 1};
         System.out.println(permuteUnique(arr));
