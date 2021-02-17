@@ -25,6 +25,7 @@ public class LevelOrder {
             }
             result.add(list);
         }
+        Math.floor(Math.sqrt(8));
         return result;
     }
 

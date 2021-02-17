@@ -25,9 +25,23 @@ public class FindMinDepth {
         return height;
     }
 
+    public static int minDepth1(TreeNode root) {
+        if (root == null) {
+            System.out.println("Root null");
+            return 0;
+        } else {
+            int a = minDepth(root.left);
+            int b = minDepth(root.right);
+            System.out.println("a " + a);
+            return Math.min(a, b) + 1;
+        }
+    }
+
     public static void main(String[] args) {
         TreeNode root = new TreeNode(1);
-        root.left = new TreeNode(2);
-        System.out.println(minDepth(root));
+        root.right = new TreeNode(2);
+        //root.right.right = new TreeNode(3);
+        //root.right.right.right = new TreeNode(4);
+        System.out.println(minDepth1(root));
     }
 }

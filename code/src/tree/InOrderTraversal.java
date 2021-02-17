@@ -21,11 +21,26 @@ public class InOrderTraversal {
         return list;
     }
 
+    public static List<Integer> inorderTraversalRec(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        helper(root, result);
+        return result;
+    }
+
+    public static void helper(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        helper(root.left, result);
+        result.add(root.val);
+        helper(root.right, result);
+    }
+
     public static void main(String[] args) {
         TreeNode root = new TreeNode(1);
         root.right = new TreeNode(2);
         root.right.left = new TreeNode(3);
-        List<Integer> l = inorderTraversal(root);
-        System.out.println(l.size());
+        List<Integer> l = inorderTraversalRec(root);
+        System.out.println(l);
     }
 }
