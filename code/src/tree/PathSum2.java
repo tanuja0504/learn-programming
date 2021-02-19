@@ -7,6 +7,7 @@ public class PathSum2 {
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
         List<List<Integer>> result = new ArrayList<>();
         helper(root, result, new ArrayList<>(), targetSum);
+        System.out.println(result);
         return result;
     }
 
