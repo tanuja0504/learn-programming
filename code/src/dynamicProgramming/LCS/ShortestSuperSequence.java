@@ -61,6 +61,6 @@ public class ShortestSuperSequence {
     }
 
     public static void main(String[] args) {
-        System.out.println(shortestCommonSupersequence("EKE", "GEEK"));
+        System.out.println(shortestCommonSupersequence("intention", "execution"));
     }
 }
