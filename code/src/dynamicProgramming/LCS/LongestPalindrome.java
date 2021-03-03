@@ -1,4 +1,4 @@
-package dynamicProgramming.lis;
+package dynamicProgramming.LCS;
 
 import java.util.HashMap;
 import java.util.Map;
