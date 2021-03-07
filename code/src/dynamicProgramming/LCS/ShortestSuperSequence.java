@@ -15,11 +15,14 @@ public class ShortestSuperSequence {
                 }
             }
         }
+        //Append String when common only once else append both characters
         printMat(dp);
         return printLCSString(str1, str2, dp);
     }
 
     static String printLCSString(String str1, String str2, int dp[][]) {
+        //Find LCS first.
+        //While Building  SCS Append String when common only once else append both characters
         int m = str1.length();
         int n = str2.length();
         StringBuilder sb = new StringBuilder();
