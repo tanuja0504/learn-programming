@@ -1,4 +1,4 @@
-package dynamicProgramming;
+package dynamicProgramming.DPGrid;
 
 public class MinPathSum {
     public static int minPathSum(int[][] grid) {
