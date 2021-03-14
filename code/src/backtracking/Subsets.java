@@ -53,7 +53,7 @@ public class Subsets {
     }
 
     public static void main(String[] args) {
-        int arr[] = {1, 2, 3, 4};
-        System.out.println(subsets1(arr));
+        int arr[] = {1, 2, 3};
+        System.out.println(subsets(arr));
     }
 }
