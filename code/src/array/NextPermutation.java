@@ -1,31 +1,32 @@
 package array;
 
 import java.util.Arrays;
-import java.util.Stack;
 
 public class NextPermutation {
     public static void nextPermutation(int[] nums) {
         int end = nums.length - 1;
         int start = 0;
-        boolean swap = false;
-        Stack<Integer> st = new Stack<>();
-        st.push(nums[end]);
-        end--;
-        while (end >= start) {
-            if (!st.isEmpty() && nums[end] < st.peek()) {
-                int temp = nums[end];
-                nums[end] = st.pop();
-                nums[end + 1] = temp;
-                swap = true;
-            } else {
-                st.push(nums[end]);
+        while (start < end) {
+            if (nums[end] > nums[end - 1]) {
+                break;
             }
             end--;
         }
-        if (!swap) {
+        if (end == start) {
             Arrays.sort(nums);
+        } else {
+            int temp = nums[end];
+            start = end + 1;
+            while (start < nums.length) {
+                if (nums[start] < nums[end]) {
+                    break;
+                }
+                start++;
+            }
+            if (start == nums.length) {
+
+            }
         }
-        System.out.println(st);
     }
 
     public static void main(String[] args) {
