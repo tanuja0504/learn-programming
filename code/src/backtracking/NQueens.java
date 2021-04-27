@@ -1,132 +1,74 @@
 package backtracking;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class NQueens {
 
     public static List<List<String>> solveNQueens(int n) {
         List<List<String>> result = new ArrayList<>();
-        //Set for maintaining rows where queen is placed
-        Set<Integer> row = new HashSet<>();
-        List<String> temp = new ArrayList<>();
-        char[][] board = new char[n][n];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                board[i][j] = '*';
-            }
+        char board[][] = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(board[i], '.');
         }
-        helper1(board, 0, 0, result, temp, n, row);
-        /*for(int i=0;i<board.length;i++){
-            for(int j=0;j<board[0].length;j++) {
-                if(board[i][j]=='*' ){
-                    System.out.println(i+" "+j);
-                    helper1(board,i,j,result,temp,n);
-                }
-            }
-        }*/
+        helper(result, board, 0);
         return result;
     }
 
-    public static void helper1(char[][] board, int indexI, int indexJ, List<List<String>> result, List<String> temp, int n, Set<Integer> row) {
-        if (indexI == board.length || indexJ == board[0].length) {
-            System.out.println("Returning at " + n);
-            return;
-        } else if (indexI == n || row.size() == n) {
-            printBoard(board);
-            return;
-        } else {
-            printBoard(board);
-            for (int j = 0; j < board[0].length; j++) {
-                if (board[indexI][j] == '.' || row.contains(indexI)) {
-                    continue;
+    public static void helper(List<List<String>> result, char board[][], int col) {
+        if (board.length == col) {
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < board.length; i++) {
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < board.length; j++) {
+                    sb.append(board[i][j]);
                 }
-                markBoard(board, indexI, j);
-                board[indexI][j] = 'Q';
-                row.add(indexI);
-                helper1(board, indexI + 1, 0, result, temp, n, row);
-                row.remove(indexI);
+                list.add(sb.toString());
             }
-
+            result.add(list);
+            return;
         }
-    }
 
-    public static void helper(char[][] board, int indexI, int indexJ, List<List<String>> result, List<String> temp, int n) {
-        printBoard(board);
-        if (indexI == board.length || indexJ == board[0].length || board[indexI][indexJ] == '.') {
-            System.out.println("Returning at " + n);
-            return;
-        } else if (n < 0) {
-            System.out.println("Got n");
-            result.add(convertListToBoard(board, temp));
-            return;
-        } else {
+        for (int i = 0; i < board.length; i++) {
+            board[i][col] = 'Q';
 
-            for (int i = indexI; i < board.length; i++) {
-                for (int j = indexJ; j < board[0].length; j++) {
-                    if (board[i][j] == 'Q' || board[i][j] == '.') {
-                        continue;
-                    }
-                    board[i][j] = 'Q';
-                    markBoard(board, i, j);
-                    helper(board, i + 1, j + 1, result, temp, n - 1);
-                    unMarkBoard(board, indexI, indexJ);
+            List<String> list = new ArrayList<>();
+            for (int i1 = 0; i1 < board.length; i1++) {
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < board.length; j++) {
+                    sb.append(board[i1][j]);
                 }
+                list.add(sb.toString());
+            }
+            result.add(list);
 
+            if (verify(board, i, col)) {
+                helper(result, board, col + 1);
+            }
+            board[i][col] = '.';
+        }
+    }
+
+    public static boolean verify(char board[][], int row, int col) {
+        boolean result = true;
+        //Check queen in previous columns
+        for (int c = 0; c < col; c++) {
+            if (board[row][c] == 'Q') {
+                return false;
             }
         }
-    }
-
-    public static List<String> convertListToBoard(char[][] board, List<String> temp) {
-        for (int i = 0; i < board.length; i++) {
-            StringBuilder str = new StringBuilder();
-            for (int j = 0; j < board[0].length; j++) {
-                str.append(board[i][j]);
-            }
-            temp.add(str.toString());
-        }
-        return temp;
-    }
-
-    public static void markBoard(char[][] board, int idxI, int idxJ) {
-        for (int i = 0; i < board.length; i++) {
-            if (board[i][idxJ] != 'Q')
-                board[i][idxJ] = '.';
-        }
-        for (int j = 0; j < board.length; j++) {
-            if (board[idxI][j] != 'Q')
-                board[idxI][j] = '.';
-        }
-        while (idxJ < board[0].length && idxI < board.length) {
-            if (board[idxI][idxJ] != 'Q')
-                board[idxI][idxJ] = '.';
-            idxI++;
-            idxJ++;
-        }
-    }
-
-    public static void unMarkBoard(char[][] board, int idxI, int idxJ) {
-        for (int i = 0; i < board.length; i++) {
-            board[i][idxJ] = '*';
-        }
-        for (int j = 0; j < board.length; j++) {
-            board[idxI][j] = '*';
-        }
-        while (idxJ < board[0].length && idxI < board.length) {
-            board[idxI][idxJ] = '*';
-            idxI++;
-            idxJ++;
-        }
-    }
-
-    public static void unMarkBoard1(char[][] board) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                board[i][j] = '*';
+        //Check queen in diagonal upper left
+        for (int r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
+            if (board[r][c] == 'Q') {
+                return false;
             }
         }
+        //Check queen in diagonal lower left
+        for (int r = row + 1, c = col - 1; r < board.length && c >= 0; r++, c--) {
+            if (board[r][c] == 'Q') {
+                return false;
+            }
+        }
+        return result;
     }
 
     public static void printBoard(char[][] board) {

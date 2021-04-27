@@ -37,7 +37,13 @@ public class WordSearch {
     public static void main(String[] args) {
         char[][] board = {{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
         char[][] board1 = {{'A', 'B'}, {'C', 'D'}};
-        String word = "ABD";
-        System.out.println(exist(board1, word));
+        char[][] board2 = {{'a', 'a', 'b', 'a', 'a', 'b'},
+                {'a', 'a', 'b', 'b', 'b', 'a'},
+                {'a', 'a', 'a', 'a', 'b', 'a'},
+                {'b', 'a', 'b', 'b', 'a', 'b'},
+                {'a', 'b', 'b', 'a', 'b', 'a'},
+                {'b', 'a', 'a', 'a', 'a', 'b'}};
+        String word = "bbbaabbbbbab";
+        System.out.println(exist(board2, word));
     }
 }
