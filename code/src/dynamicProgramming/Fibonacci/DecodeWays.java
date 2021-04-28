@@ -5,35 +5,46 @@ import java.util.Set;
 
 public class DecodeWays {
     public static int numDecodings(String s) {
-        int dp[] = new int[s.length() + 1];
+        //Either current char or current-1 char are valid
+        //If current is valid, no of ways remains same
+        //If current is invalid no of ways become 0
+        //If current and current-1 combination is valid add current ways + current-2 ways
+        int m = s.length() + 1;
+        int dp[] = new int[m];
+        dp[0] = 1;
 
-        if (isValid(s.substring(0, 1)) == 0) {
+        if (verify(s.substring(0, 1))) {
+            dp[1] = 1;
+        } else {
             return 0;
         }
-        if (s.length() == 1) {
-            return isValid(s);
-        }
-        dp[0] = 1;
-        dp[1] = 1;
-        for (int i = 2; i <= s.length(); i++) {
-            String t = s.substring(i - 2, i);
-            if (isValid(t) == 2) {
-                dp[i] += dp[i - 2];
-            }
-            if (isValid(s.substring(i - 1, i)) == 1) {
-                dp[i] += dp[i - 1];
-            }
-            System.out.println(s.charAt(i - 1) + " " + t + " " + isValid(t) + " " + dp[i]);
-        }
 
-        System.out.println();
-        for (int num : dp) {
-            System.out.print(num + " ");
+        for (int i = 2; i < m; i++) {
+            if (verify(s.substring(i - 1, i))) {
+                dp[i] = dp[i - 1];
+            } else {
+                dp[i] = 0;
+            }
+            if (verify(s.substring(i - 2, i))) {
+                dp[i] = dp[i] + dp[i - 2];
+            }
+            if (dp[i] == 0) {
+                return 0;
+            }
         }
-        System.out.println();
-        return dp[s.length()];
+        return dp[m - 1];
     }
 
+    public static boolean verify(String s) {
+        if (s.charAt(0) == '0') {
+            return false;
+        }
+        int temp = Integer.parseInt(s);
+        if (temp > 0 && temp <= 26) {
+            return true;
+        }
+        return false;
+    }
     public static int isValid(String s) {
         int temp = Integer.parseInt(s);
         Set<Integer> hset = new HashSet<>();
@@ -61,7 +72,7 @@ public class DecodeWays {
     }
 
     public static void main(String[] args) {
-
-        System.out.println(numDecodings("11106"));
+        System.out.println(verify("01"));
+        System.out.println(numDecodings("2101"));
     }
 }
