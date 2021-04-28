@@ -1,33 +1,31 @@
-package backtracking;
+package dynamicProgramming.UnboundedKnapsack;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class WordBreak {
     public static boolean wordBreak(String s, List<String> wordDict) {
         int m = s.length();
-        boolean result = false;
-        boolean dp[][] = new boolean[m + 1][m + 1];
-        dp[0][0] = true;
-        Set<Integer> set = new HashSet<>();
-        set.add(0);
+        boolean dp[] = new boolean[m + 1];
+        List<Integer> index = new ArrayList<>();
+        index.add(-1);
         for (int i = 1; i <= m; i++) {
-            for (int j = i; j <= m; j++) {
-                String t1 = s.substring(i - 1, j - 1);
-                if (wordDict.contains(t1) && set.contains(j - t1.length() - 1)) {
-                    dp[i][j] = true;
-                    set.add(j);
+            System.out.println(i);
+            for (int j : index) {
+                System.out.println(s.substring(j + 1, i));
+                if (wordDict.contains(s.substring(j + 1, i))) {
+                    dp[i] = true;
                 }
             }
+            if (dp[i] == true) {
+                index.add(i - 1);
+            }
+            System.out.println(index);
         }
-        System.out.println(set);
-        print(dp);
-        for (int i = 0; i <= m; i++) {
-            result = result || dp[i][m];
+        for (boolean b : dp) {
+            System.out.print(b + " ");
         }
-        return result;
+        return dp[m];
     }
 
     public static void print(boolean dp[][]) {
