@@ -1,61 +1,71 @@
 package tree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
-class Node {
-    public int val;
-    public Node left;
-    public Node right;
-    public Node next;
-
-    public Node() {
-    }
-
-    public Node(int _val) {
-        val = _val;
-    }
-
-    public Node(int _val, Node _left, Node _right, Node _next) {
-        val = _val;
-        left = _left;
-        right = _right;
-        next = _next;
-    }
-};
-
 public class NextPointerTree {
+    public Node connect(Node root) {
+        helper(root);
+        return root;
+    }
 
-    public static Node connect(Node root) {
+    public void helper(Node root) {
+        if (root == null) {
+            return;
+        }
+        if (root.left != null) {
+            if (root.right != null) {
+                root.left.next = root.right;
+            } else if (root.next != null) {
+                if (root.next.left != null) {
+                    root.left.next = root.next.left;
+                } else if (root.next.right != null) {
+                    root.left.next = root.next.right;
+                }
+            }
+        }
+        if (root.right != null) {
+            if (root.next.left != null) {
+                root.right.next = root.next.left;
+            } else if (root.next.right != null) {
+                root.right.next = root.next.right;
+            }
+        }
+        helper(root.left);
+        helper(root.right);
+    }
+
+    public static Node connect1(Node root) {
         Queue<Node> q = new LinkedList<>();
-        Node current = root;
-        q.add(current);
-        int level = 0;
+        q.add(root);
         while (!q.isEmpty()) {
             int size = q.size();
-            level++;
-            while (!q.isEmpty() && size >= 0) {
-                Node temp = q.poll();
+            List<Node> list = new ArrayList<>();
+            while (size > 0) {
+                Node current = q.poll();
                 if (!q.isEmpty()) {
-
+                    current.next = q.peek();
                 }
-                if (temp.left != null) {
-                    q.add(temp.left);
-                }
-                if (temp.right != null) {
-                    q.add(temp.right);
-                }
+                list.add(current);
                 size--;
             }
-
+            for (Node n : list) {
+                if (n.left != null) {
+                    q.add(n.left);
+                }
+                if (n.right != null) {
+                    q.add(n.right);
+                }
+            }
         }
-        return null;
+        return root;
     }
-
     public static void main(String[] args) {
         Node root = new Node(5);
         root.right = new Node(6);
         root.left = new Node(8);
-        System.out.println(connect(root));
+        System.out.println(connect1(root));
     }
 }
