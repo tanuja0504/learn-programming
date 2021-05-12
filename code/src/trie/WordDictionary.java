@@ -34,13 +34,14 @@ public class WordDictionary {
     }
 
     public TrieNode searchWithDot(TrieNode node, String word) {
+        System.out.println(word);
         if (node == null) {
             return node;
         }
         TrieNode curr = node;
         for (int i = 0; i < word.length(); i++) {
             int index = word.charAt(i) - 'a';
-            if (curr.children[index] != null) {
+            if (curr != null && curr.children[index] != null) {
                 curr = curr.children[index];
             } else {
                 return null;
@@ -54,19 +55,15 @@ public class WordDictionary {
         int len = word.length();
         for (int i = 0; i < word.length(); i++) {
             if (word.charAt(i) == '.') {
-                int j = 0;
-                TrieNode result = null;
-                while (j < root.N && result == null) {
-                    result = searchWithDot(curr.children[j], word.substring(i + 1, len));
-                    if (result != null) {
-                        break;
+                TrieNode result;
+                for (char c = 'a'; c <= 'z'; c++) {
+                    String word1 = word.substring(0, i) + c + word.substring(i + 1, len);
+                    result = searchWithDot(curr, word1);
+                    if (result == null) {
+                        return false;
+                    } else {
+                        curr = result;
                     }
-                    j++;
-                }
-                if (result != null) {
-                    curr = result;
-                } else {
-                    return false;
                 }
             } else if (word.charAt(i) != '.' && curr != null) {
                 int index = word.charAt(i) - 'a';
@@ -81,9 +78,13 @@ public class WordDictionary {
     }
 
     public static void main(String[] args) {
-        String word = "apple";
+        String word = "bad";
         WordDictionary obj = new WordDictionary();
-        obj.addWord(word);
-        System.out.println(obj.search("app.."));
+        obj.addWord("bad");
+        obj.addWord("dad");
+        obj.addWord("mad");
+        obj.addWord("pad");
+        System.out.println(obj.search("pad"));
+        System.out.println(obj.search("b.."));
     }
 }
