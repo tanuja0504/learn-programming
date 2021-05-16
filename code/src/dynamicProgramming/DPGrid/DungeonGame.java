@@ -5,17 +5,14 @@ public class DungeonGame {
         int m = dungeon.length;
         int n = dungeon[0].length;
         int dp[][] = new int[m][n];
+        int health = 0;
 
-
-        for (int i = 1; i < m; i++) {
-            for (int j = 1; j < n; j++) {
-                int temp = 0;
-                if (dp[i - 1][j] > 0) {
-                    temp = Math.min(dp[i - 1][j], dp[i][j - 1]);
-                } else {
-                    temp = Math.max(dp[i - 1][j], dp[i][j - 1]);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 && j == 0 && dungeon[i][j] < 1) {
+                    health = dungeon[0][0] * -1 + 1;
                 }
-                dp[i][j] = temp - dungeon[i][j];
+
             }
         }
         print(dp);
