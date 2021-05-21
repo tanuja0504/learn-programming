@@ -6,34 +6,34 @@ import java.util.List;
 public class SpiralMatrix {
     public static List<Integer> spiralOrder(int[][] matrix) {
         List<Integer> result = new ArrayList<>();
-        int row = matrix.length;
-        int column = matrix[0].length;
-        int r = 0;
-        int c = 0;
-        int iniC = 0;
-        int iniR = 0;
-        while (r < row && c < column) {
-            iniC = c;
-            iniR = r;
-            while (c < column) {
-                System.out.print(matrix[r][c] + " ");
-                c++;
+        int left = 0;
+        int right = matrix[0].length - 1;
+        int top = 0;
+        int bottom = matrix.length - 1;
+        while (left <= right && top <= bottom) {
+
+            for (int col = left; col <= right; col++) {
+                result.add(matrix[top][col]);
             }
-            c--;
-            r++;
-            while (r < row) {
-                System.out.print(matrix[r][c] + " ");
-                r++;
+
+            for (int row = top + 1; row <= bottom; row++) {
+                result.add(matrix[row][right]);
             }
-            r--;
-            c--;
-            while (c > -1) {
-                System.out.print(matrix[r][c] + " ");
-                c--;
+
+            for (int col = right - 1; col >= left && top != bottom; col--) {
+                result.add(matrix[bottom][col]);
             }
-            r = iniR + 1;
-            c = iniC + 1;
+
+            for (int row = bottom - 1; row >= top + 1 && left != right; row--) {
+                result.add(matrix[row][left]);
+            }
+            top++;
+            bottom--;
+            left++;
+            right--;
         }
+
+
         return result;
     }
 
@@ -46,13 +46,19 @@ public class SpiralMatrix {
                 count++;
             }
         }
+
+        System.out.println();
+        int matrix1[][] = {{7}, {9}, {6}};
+        int matrix2[][] = {{2, 3, 4}, {5, 6, 7}, {8, 9, 10}, {11, 12, 13}, {14, 15, 16}};
+
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
                 System.out.print(matrix[i][j] + " ");
             }
             System.out.println();
         }
-        System.out.println();
-        spiralOrder(matrix);
+
+        List<Integer> result = spiralOrder(matrix);
+        System.out.println(result);
     }
 }
