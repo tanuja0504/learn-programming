@@ -16,9 +16,20 @@ public class ContainsDuplicateIII {
         return result;
     }
 
+    public static boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        Map<Integer, Integer> tmap = new TreeMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            tmap.put(t - nums[i], i);
+        }
+        System.out.println(tmap);
+        return false;
+    }
+
     public static void main(String[] args) {
-        int nums[] = {1, 0, 1, 1};
-        int k = 1;
-        System.out.println(containsNearbyDuplicate(nums, k));
+        int nums[] = {1, 2, 3, 1};
+        int k = 3;
+        int t = 0;
+        //System.out.println(containsNearbyDuplicate(nums, k));
+        System.out.println(containsNearbyAlmostDuplicate(nums, k, t));
     }
 }

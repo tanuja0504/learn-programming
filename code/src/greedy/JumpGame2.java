@@ -1,32 +1,24 @@
 package greedy;
 
+import java.util.Arrays;
+
 public class JumpGame2 {
 
     public static int jump(int[] nums) {
-        int r = Integer.MAX_VALUE;
-        if (nums.length == 1) {
-            return 0;
-        }
-        int jump[] = new int[nums.length];
+        int len = nums.length;
+        int jump[] = new int[len];
+        Arrays.fill(jump, Integer.MAX_VALUE);
+        jump[0] = 0;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == 0) {
+                continue;
+            }
+            for (int j = 1; j <= nums[i] && i + j < len; j++) {
+                jump[i + j] = Math.min(jump[i] + 1, jump[i + j]);
 
-        for (int i = 0; i < nums.length; i++) {
-            int j = i;
-            printJump(jump);
-            while (j > 0 && j < nums.length && jump[j] < nums.length) {
-                //System.out.println(jump[i]);
-                if (nums[j] == 0) {
-                    jump[i] = Integer.MIN_VALUE;
-                    break;
-                }
-                j = nums[j];
-                jump[i] = jump[i] + 1;
             }
         }
-        for (int i : jump) {
-
-            r = Math.min(r + i, i);
-        }
-        return r;
+        return jump[len - 1];
     }
 
     static void printJump(int[] jump) {
@@ -51,6 +43,6 @@ public class JumpGame2 {
         int nums2[] = {1, 2, 3};
         int nums3[] = {7, 0, 9, 6, 9, 6, 1, 7, 9, 0, 1, 2, 9, 0, 3};
         int nums4[] = {1, 1, 1, 1};
-        System.out.println(jump(nums3));
+        System.out.println(jump(nums1));
     }
 }
