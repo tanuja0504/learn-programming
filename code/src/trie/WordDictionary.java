@@ -20,61 +20,36 @@ public class WordDictionary {
     }
 
     public void addWord(String word) {
-        int len = word.length();
-        TrieNode curr = new TrieNode();
-        curr = root;
-        for (int i = 0; i < len; i++) {
-            int index = word.charAt(i) - 'a';
-            if (curr.children[index] == null) {
-                curr.children[index] = new TrieNode();
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            if (node.children[c - 'a'] == null) {
+                node.children[c - 'a'] = new TrieNode();
             }
-            curr = curr.children[index];
+            node = node.children[c - 'a'];
         }
-        curr.isEndOfWord = true;
-    }
-
-    public TrieNode searchWithDot(TrieNode node, String word) {
-        System.out.println(word);
-        if (node == null) {
-            return node;
-        }
-        TrieNode curr = node;
-        for (int i = 0; i < word.length(); i++) {
-            int index = word.charAt(i) - 'a';
-            if (curr != null && curr.children[index] != null) {
-                curr = curr.children[index];
-            } else {
-                return null;
-            }
-        }
-        return curr;
+        node.isEndOfWord = true;
     }
 
     public boolean search(String word) {
-        TrieNode curr = root;
-        int len = word.length();
-        for (int i = 0; i < word.length(); i++) {
-            if (word.charAt(i) == '.') {
-                TrieNode result;
-                for (char c = 'a'; c <= 'z'; c++) {
-                    String word1 = word.substring(0, i) + c + word.substring(i + 1, len);
-                    result = searchWithDot(curr, word1);
-                    if (result == null) {
-                        return false;
-                    } else {
-                        curr = result;
-                    }
-                }
-            } else if (word.charAt(i) != '.' && curr != null) {
-                int index = word.charAt(i) - 'a';
-                if (curr.children[index] != null) {
-                    curr = curr.children[index];
-                } else {
-                    return false;
+        return isAMatch(word.toCharArray(), 0, root);
+    }
+
+    public boolean isAMatch(char input[], int start, TrieNode node) {
+
+        if (start == input.length) {
+            return node.isEndOfWord;
+        }
+        boolean result = false;
+        if (input[start] != '.') {
+            result = node.children[input[start] - 'a'] != null && isAMatch(input, start + 1, node.children[input[start] - 'a']);
+        } else {
+            for (char c = 0; c < 26; c++) {
+                if (node.children[c] != null) {
+                    result = isAMatch(input, start + 1, node.children[input[start + 1] - 'a']);
                 }
             }
         }
-        return curr.isEndOfWord;
+        return result;
     }
 
     public static void main(String[] args) {
@@ -84,7 +59,7 @@ public class WordDictionary {
         obj.addWord("dad");
         obj.addWord("mad");
         obj.addWord("pad");
-        System.out.println(obj.search("pad"));
-        System.out.println(obj.search("b.."));
+        //System.out.println(obj.search("pad"));
+        System.out.println(obj.search("x.."));
     }
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MajorityElement {
+    /*https://gregable.com/2013/10/majority-vote-algorithm-find-majority.html*/
+
     public static int majorityElement(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         int major = -1;
