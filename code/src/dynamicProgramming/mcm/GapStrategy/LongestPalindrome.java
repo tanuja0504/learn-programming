@@ -1,4 +1,4 @@
-package dynamicProgramming.LCS;
+package dynamicProgramming.mcm.GapStrategy;
 
 public class LongestPalindrome {
     public static String longestPalindrome(String s) {

@@ -2,30 +2,37 @@ package tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class ConstructBinaryTreePostorderInorder {
     public static TreeNode buildTree(int[] inorder, int[] postorder) {
-        return helper(0, inorder.length - 1, postorder.length - 1, inorder, postorder, "root");
-    }
+        if (inorder.length == 0 || postorder.length == 0) return null;
+        int ip = inorder.length - 1;
+        int pp = postorder.length - 1;
 
-    public static TreeNode helper(int iStart, int iEnd, int pEnd, int[] inorder, int[] postorder, String s) {
-        if (iStart > iEnd || pEnd < 0 || pEnd > postorder.length || iEnd >= inorder.length) {
-            System.out.println("Failing for " + s);
-            return null;
-        }
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        TreeNode prev = null;
+        TreeNode root = new TreeNode(postorder[pp]);
+        stack.push(root);
+        pp--;
 
-        int val = postorder[pEnd];
-        TreeNode root = new TreeNode(val);
-        System.out.println(s);
-        int index;
-        for (index = iStart; index <= iEnd; index++) {
-            if (val == inorder[index]) {
-                break;
+        while (pp >= 0) {
+            while (!stack.isEmpty() && stack.peek().val == inorder[ip]) {
+                prev = stack.pop();
+                ip--;
             }
+            TreeNode newNode = new TreeNode(postorder[pp]);
+            if (prev != null) {
+                prev.left = newNode;
+            } else if (!stack.isEmpty()) {
+                TreeNode currTop = stack.peek();
+                currTop.right = newNode;
+            }
+            stack.push(newNode);
+            prev = null;
+            pp--;
         }
-        int t = pEnd - (index - iStart) - 1;
-        root.right = helper(index, iEnd, pEnd - 1, inorder, postorder, "right with root " + val + " " + index + " " + iEnd);
-        root.left = helper(iStart, index - 1, t, inorder, postorder, "left with root " + val + " " + " " + iStart);
+
         return root;
     }
 
@@ -43,9 +50,6 @@ public class ConstructBinaryTreePostorderInorder {
     public static void main(String[] args) {
         int in[] = {9, 3, 15, 20, 7};
         int post[] = {9, 15, 7, 20, 3};
-
-        int pre1[] = {};
-        int in1[] = {};
         System.out.println(printTree(buildTree(in, post), new ArrayList<>()));
     }
 }
