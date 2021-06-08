@@ -3,106 +3,85 @@ package bfs;
 import java.util.*;
 
 public class WordLadder3 {
+    //https://leetcode.com/problems/word-ladder-ii/discuss/1207696/Java-or-BFS%2BDFS-or-Simple-explanations-with-examples-or-Faster-than-80
     public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        Set<String> dict = new HashSet<>(wordList); //for O(1) lookup
         List<List<String>> result = new ArrayList<>();
-        if (!wordList.contains(endWord)) {
+
+        if (!dict.contains(endWord))
             return result;
-        }
-        Map<String, List<String>> dictionary = new TreeMap<>();
-        System.out.println(wordList.contains(beginWord));
-        dictionary.put(beginWord, new ArrayList<>());
-        if (wordList.contains(beginWord)) {
-            wordList.remove(beginWord);
-        }
-        for (String s : wordList) {
-            dictionary.put(s, new ArrayList<>());
-        }
-        for (Map.Entry<String, List<String>> e : dictionary.entrySet()) {
-            getNeighbors(e.getKey(), wordList, dictionary);
-        }
-        int minDepth = getMinDepthBFS(beginWord, endWord, dictionary);
+
+        Map<String, Set<String>> map = new HashMap<>(); //has to be Set & not list
+        bfs(beginWord, endWord, dict, map);
+
         List<String> list = new ArrayList<>();
-        list.add(beginWord);
-        getMinPathDFS(result, list, beginWord, endWord, minDepth, dictionary, new HashSet<>());
+        list.add(beginWord); //adding begin word in the list to start with...
+
+        dfs(map, beginWord, endWord, result, list); //backtrack
         return result;
     }
 
-    public static void getNeighbors(String beginWord, List<String> wordList, Map<String, List<String>> dictionary) {
-        for (int i = 0; i < beginWord.length(); i++) {
-            char input[] = beginWord.toCharArray();
-            for (char c = 'a'; c <= 'z'; c++) {
-                input[i] = c;
-                StringBuilder sb = new StringBuilder();
-                for (char t : input) {
-                    sb.append(t);
-                }
-                if (wordList.contains(sb.toString()) && !sb.toString().equals(beginWord)) {
-                    dictionary.get(beginWord).add(sb.toString());
-                }
+    private static void bfs(String beginWord, String endWord, Set<String> dict, Map<String, Set<String>> map) {
+        Queue<String> q = new LinkedList<>();
+        q.offer(beginWord);
+        boolean isFinish = false;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+
+            Iterator<String> itr = q.iterator();
+            while (itr.hasNext()) { //IMP: To avoid looping
+                dict.remove(itr.next());
             }
-        }
-    }
 
-    public static int getMinDepthBFS(String beginWord, String endWord, Map<String, List<String>> dictionary) {
-        if (beginWord.equals(endWord)) {
-            return 0;
-        }
-
-        int depth = 0;
-        Queue<String> depthQ = new LinkedList<>();
-        Set<String> visited = new HashSet<>();
-        depthQ.add(beginWord);
-        boolean found = false;
-        while (!depthQ.isEmpty() && !found) {
-            int size = depthQ.size();
-            depth++;
             for (int i = 0; i < size; i++) {
-                String s = depthQ.poll();
-                if (s.equals(endWord)) {
-                    found = true;
-                    break;
-                }
-                if (!visited.contains(s)) {
-                    List<String> neighbors = dictionary.get(s);
-                    for (String t : neighbors) {
-                        if (!visited.contains(t)) {
-                            depthQ.add(t);
+                String word = q.poll();
 
+                char[] chs = word.toCharArray(); //for replacing char
+                for (int j = 0; j < word.length(); j++) {
+                    char old = chs[j]; //hold old char
+
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        if (chs[j] == c) continue; //if same char then continue
+                        chs[j] = c; //for each jth pos replace char a-z and find match for potential candidate...
+                        String newWord = String.valueOf(chs);
+
+                        if (dict.contains(newWord)) {
+                            if (newWord.equals(endWord))
+                                isFinish = true; //to stop next level iteration
+                            else
+                                q.offer(newWord);
+                            map.putIfAbsent(word, new HashSet<>());
+                            map.get(word).add(newWord);
                         }
                     }
-                    visited.add(s);
+                    chs[j] = old; //replace back old char
                 }
-
             }
+
+            if (isFinish)
+                return; //already got all combination of shortest path...
         }
-        return depth;
     }
 
-    public static void getMinPathDFS(List<List<String>> result, List<String> list, String beginWord, String endWord, int minDepth, Map<String, List<String>> dictionary, Set<String> visited) {
-
-        if (list.size() > minDepth && !beginWord.equals(endWord)) {
-            return;
-        }
-
-        if (list.size() <= minDepth && beginWord.equals(endWord)) {
+    private static void dfs(Map<String, Set<String>> map, String beginWord, String endWord, List<List<String>> result, List<String> list) {
+        if (beginWord.equals(endWord)) {
             result.add(new ArrayList<>(list));
             return;
         }
-        List<String> neighbors = dictionary.get(beginWord);
-        for (String s : neighbors) {
-            if (visited.contains(s)) {
-                continue;
-            }
-            visited.add(s);
-            list.add(s);
-            getMinPathDFS(result, list, s, endWord, minDepth, dictionary, visited);
-            int size = list.size() - 1;
-            list.remove(size);
-            visited.remove(s);
+
+        if (map.get(beginWord) == null) return;
+
+        for (String word : map.get(beginWord)) {
+            list.add(word);
+            dfs(map, word, endWord, result, list);
+            list.remove(list.size() - 1);
         }
     }
 
+
     public static void main(String[] args) {
+
         String words[] = {"hot", "dot", "dog", "lot", "log", "cog"};
         String beginWord = "hit";
         String endWord = "cog";

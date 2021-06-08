@@ -10,7 +10,8 @@ public class GenerateParen {
 
     public List<String> generateParenthesis(int n) {
         List<String> list = new ArrayList<>();
-        findString(list, new StringBuilder(), n, n, 0);
+        //findString(list, new StringBuilder(), n, n, 0);
+        findString1(list, new StringBuilder(), 0, 0, n);
         return list;
     }
 
@@ -28,6 +29,27 @@ public class GenerateParen {
             s.append(c2);
             findString(list, s, leftC, rightC - 1, open - 1);
             s.deleteCharAt(s.length() - 1);
+        }
+    }
+
+    public void findString1(List<String> list, StringBuilder s, int open, int close, int n) {
+        if (open == close && open == n) {
+            list.add(new String(s.toString()));
+            return;
+        }
+        if (open > n) {
+            return;
+        }
+        if (open <= close) {
+            s.append('(');
+            findString1(list, s, open + 1, close, n);
+        } else {
+            int len = s.length();
+            s.append(')');
+            findString1(list, s, open, close + 1, n);
+            s.setLength(len);
+            s.append('(');
+            findString1(list, s, open + 1, close, n);
         }
     }
 

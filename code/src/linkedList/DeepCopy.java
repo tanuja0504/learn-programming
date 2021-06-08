@@ -66,6 +66,49 @@ public class DeepCopy {
         return output;
     }
 
+    public static Node copyRandomListV2(Node head) {
+        if (head == null) {
+            return null;
+        }
+        Node newHead = new Node(head.val);
+        Node current = head;
+        Node newCurrent = newHead;
+        Node dummy = newCurrent;
+        while (current != null) {
+            newCurrent.next = current.next;
+            current.next = dummy;
+            current = newCurrent.next;
+            if (current != null) {
+                dummy = new Node(current.val);
+                newCurrent = dummy;
+            }
+        }
+        current = head;
+        newCurrent = newHead;
+        while (newCurrent.next != null) {
+            if (current.random != null) {
+                newCurrent.random = current.random.next;
+            }
+            current = current.next.next;
+            newCurrent = newCurrent.next.next;
+        }
+        if (current.random != null) {
+            newCurrent.random = current.random.next;
+        }
+        current = head;
+        newCurrent = newHead;
+        while (current.next != null && newCurrent.next != null) {
+            current.next = current.next.next;
+            current = current.next;
+            newCurrent.next = newCurrent.next.next;
+            newCurrent = newCurrent.next;
+        }
+
+        current.next = null;
+
+        return newHead;
+    }
+
     public static void main(String[] args) {
         Node n = new Node(7);
         n.next = new Node(13);
@@ -78,15 +121,13 @@ public class DeepCopy {
         n.next.next.next.random = n.next;
         n.next.next.next.next.random = n;
         Node print = n;
-        copyRandomList(null);
-        while (print != null) {
-            System.out.print(print.val);
-            if (print.random == null) {
-                System.out.print(" null");
-            } else
-                System.out.print(" " + print.random.val);
-            print = print.next;
-            System.out.println();
+        //copyRandomList(null);
+
+
+        Node printV2 = copyRandomListV2(n);
+        while (printV2 != null) {
+            System.out.print(printV2.val + " ");
+            printV2 = printV2.next;
         }
     }
 }

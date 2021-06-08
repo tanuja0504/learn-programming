@@ -2,25 +2,16 @@ package binarySearch;
 
 public class HIndex2 {
     public static int hIndex(int[] citations) {
-        int left = 0;
-        int right = citations.length - 1;
-        int m = citations.length;
-        int mid = 0;
-        int ans = 0;
+        if (citations == null || citations.length == 0) return 0;
+        int left = 0, right = citations.length;
+        int n = citations.length;
         while (left < right) {
-            mid = left + ((right - left) / 2);
-            System.out.println(mid + " " + left + " " + right);
-            if (citations[mid] == m - mid) {
-                ans = Math.max(mid, ans);
-                break;
-            } else if (citations[mid] > m - mid) {
-                right = mid;
-                ans = Math.max(mid + 1, ans);
-            } else {
-                left = mid + 1;
-            }
+            int mid = left + (right - left) / 2;
+            if (citations[mid] == n - mid) return n - mid;
+            if (citations[mid] < citations.length - mid) left = mid + 1;
+            else right = mid;
         }
-        return ans;
+        return n - left;
     }
 
     public static void main(String[] args) {
