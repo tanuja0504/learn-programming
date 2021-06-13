@@ -1,8 +1,6 @@
 package tree;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class ZigZagOrder {
     public static List<List<Integer>> zigzagLevelOrder(TreeNode root) {
@@ -41,6 +39,35 @@ public class ZigZagOrder {
         return result;
     }
 
+    public static List<List<Integer>> zigzag(TreeNode root) {
+        Queue<TreeNode> q = new LinkedList<>();
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        q.add(root);
+        boolean changeDir = true;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            List<Integer> t = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode temp = q.poll();
+                t.add(temp.val);
+                if (temp.left != null) {
+                    q.add(temp.left);
+                }
+                if (temp.right != null) {
+                    q.add(temp.right);
+                }
+            }
+            if (changeDir) {
+                Collections.reverse(t);
+                changeDir = !changeDir;
+            }
+            result.add(t);
+        }
+        return result;
+    }
     public static void main(String[] args) {
         TreeNode root = new TreeNode(0);
         root.left = new TreeNode(2);
@@ -52,6 +79,7 @@ public class ZigZagOrder {
         root.right.left.right = new TreeNode(6);
         root.right.right = new TreeNode(-1);
         root.right.right.right = new TreeNode(8);
-        System.out.println(zigzagLevelOrder(root).get(2));
+        System.out.println(zigzagLevelOrder(root));
+        System.out.println(zigzag(root));
     }
 }
