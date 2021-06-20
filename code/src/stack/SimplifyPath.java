@@ -13,7 +13,7 @@ public class SimplifyPath {
 
         for (int token = 0; token < paths.length; token++) {
             if (paths[token].equals("/") || paths[token].equals("")) {
-
+                continue;
             } else if (paths[token].equals("..") && !st.isEmpty()) {
                 st.pop();
             } else if (paths[token].equals("..") && st.isEmpty()) {
@@ -41,8 +41,38 @@ public class SimplifyPath {
         return op;
     }
 
+    public static String simplifyPath1(String path) {
+
+        String input[] = path.split("/");
+        Stack<String> st = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.length; i++) {
+            if (input[i].equals("/") || input[i].equals(".") || input[i].equals("")) {
+                continue;
+            } else if (input[i].equals("..")) {
+                if (!st.isEmpty()) {
+                    st.pop();
+                }
+            } else {
+                st.push(input[i]);
+            }
+        }
+
+        if (st.isEmpty()) {
+            sb.append("/");
+        }
+
+        while (!st.isEmpty()) {
+
+            sb.insert(0, st.pop());
+            sb.insert(0, "/");
+        }
+
+        return sb.toString();
+    }
     public static void main(String[] args) {
-        String str = "/.";
+        String str = "/a//b////c/d//././/..";
         System.out.println(simplifyPath(str));
+        System.out.println(simplifyPath1(str));
     }
 }
